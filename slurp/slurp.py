@@ -55,8 +55,8 @@ def getKey(keyOrPath):
 
 def slurpMessages(threadID, token, numMessages):
 	url = "https://graph.facebook.com/%s/comments" % (threadID)
-	params = {}
 	messages = []
+	params = {}
 	params["access_token"] = token
 	params["date_format"] = 'U'
 	i = 0
@@ -86,12 +86,12 @@ def slurpMessages(threadID, token, numMessages):
 	return messages
 
 def main():
+	global progress
 	args = parseArgs()
+	progress = args.progress
+	numMessages = args.num_messages
 	token = getKey(args.tokenOrPath)
 	threadID = getKey(args.idOrPath)
-	numMessages = args.num_messages
-	global progress
-	progress = args.progress
 	outputFile = sys.stdout
 	if args.output is not None:
 		outputPath = args.output
