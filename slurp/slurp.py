@@ -82,7 +82,11 @@ def slurpMessages(threadID, token, numMessages):
 			i += 1
 			if i >= numMessages:
 				break
-		url = json["paging"]["next"]
+		try:
+			url = json["paging"]["next"]
+		except KeyError:
+			sys.stderr.write("No more pages")
+			break
 	return messages
 
 def main():
