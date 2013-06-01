@@ -78,7 +78,7 @@ def slurpMessages(threadID, token, numMessages):
 				message = Message(time, sender, text)
 				messages.append(message)
 			except KeyError as e:
-				sys.stderr.write("Coudln't parse message %d (%s) %s\n" % (i, e, message_json))
+				sys.stderr.write("Couldn't parse message %d (%s) %s\n" % (i, e, message_json))
 			i += 1
 			if i >= numMessages:
 				break
