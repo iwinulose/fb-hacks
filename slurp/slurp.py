@@ -17,10 +17,22 @@ DEFAULT_MESSAGE_COUNT = 100
 DEFAULT_TOKEN_FILE_NAME = "token"
 DEFAULT_THREAD_ID_FILE_NAME = "threadID"
 
-tokenHelpText  = """A Facebook access token or a path to a file containing the access token on the first line. The token must have the 'mailbox_read' permission. If absent, the script searches the current directory for a file named '%s'""" % (DEFAULT_TOKEN_FILE_NAME)
-threadHelpText = """ThreadID of the thread or path to a file the thread ID on the first line. If absent, the script searches the current directory for a file named '%s'""" % (DEFAULT_THREAD_ID_FILE_NAME)
-numMessageHelpText = """Number of messages to retrieve. Default: %d""" % (DEFAULT_MESSAGE_COUNT)
-outputHelpText="""File to write the messages to. If absent, writes to stdout"""
+tokenHelpText  = "\
+A Facebook access token or a path to a file containing the access \
+token on the first line. The token must have the 'mailbox_read' \
+permission. If absent, the script searches the current directory \
+for a file named '%s'" % (DEFAULT_TOKEN_FILE_NAME)
+
+threadHelpText = "\
+ThreadID of the thread or path to a file the thread ID on the first \
+line. If absent, the script searches the current directory for a \
+file named '%s'" % (DEFAULT_THREAD_ID_FILE_NAME)
+
+numMessageHelpText = "\
+Number of messages to retrieve. Default: %d" % (DEFAULT_MESSAGE_COUNT)
+
+outputHelpText="\
+File to write the messages to. If absent, writes to stdout"
 
 progress = False
 
@@ -40,7 +52,7 @@ def parseArgs():
 	parser.add_argument("-t", "--token", dest="tokenOrPath", metavar="TOKEN", default=DEFAULT_TOKEN_FILE_NAME, help=tokenHelpText);
 	parser.add_argument("-i", "--threadID", dest="idOrPath", metavar="ID", default=DEFAULT_THREAD_ID_FILE_NAME, help=threadHelpText)
 	parser.add_argument("-n", "--num-messages", required=False, type=int, default=DEFAULT_MESSAGE_COUNT, help=numMessageHelpText)
-	parser.add_argument("-o", "--output", required=False, metavar="PATH", help=outputHelpText)
+	parser.add_argument("-o", "--output", type=argparse.FileType("w"), default=sys.stdout, metavar="PATH", help=outputHelpText)
 	parser.add_argument("-p", "--progress", action="store_true", help="Print progress updates to stderr")
 	return parser.parse_args()
 
@@ -96,10 +108,7 @@ def main():
 	numMessages = args.num_messages
 	token = getKey(args.tokenOrPath)
 	threadID = getKey(args.idOrPath)
-	outputFile = sys.stdout
-	if args.output is not None:
-		outputPath = args.output
-		outputFile = open(outputPath, mode='w')
+	outputFile = args.output
 	messages = slurpMessages(threadID, token, numMessages)
 	messages.sort(cmp=lambda x, y: cmp(x._time, y._time))
 	output = u"\n".join(map(unicode, messages)).encode('utf-8')
