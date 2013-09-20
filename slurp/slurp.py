@@ -39,13 +39,13 @@ progress = False
 class Message(object):
 	def __init__(self, time, sender, text):
 		super(Message, self).__init__()
-		self._time = time
-		self._sender = sender
-		self._text = text
+		self.time = time
+		self.sender = sender
+		self.text = text
 	
 	def __str__(self):
-		timeString = time.ctime(self._time)
-		return u"(%s) %s: %s" % (timeString, self._sender, self._text)
+		timeString = time.ctime(self.time)
+		return u"(%s) %s: %s" % (timeString, self.sender, self.text)
 	
 def parseArgs():
 	parser = argparse.ArgumentParser()
@@ -110,7 +110,7 @@ def main():
 	threadID = getKey(args.idOrPath)
 	outputFile = args.output
 	messages = slurpMessages(threadID, token, numMessages)
-	messages.sort(cmp=lambda x, y: cmp(x._time, y._time))
+	messages.sort(cmp=lambda x, y: cmp(x.time, y.time))
 	output = u"\n".join(map(unicode, messages)).encode('utf-8')
 	outputFile.write(output)
 	outputFile.write("\n")
