@@ -81,7 +81,16 @@ def parseArgs():
 	return parser.parse_args()
 
 def validate_arguments(token, threadID):
-	return not (token == DEFAULT_TOKEN_FILE_NAME or threadID == DEFAULT_THREAD_ID_FILE_NAME)
+	valid = False
+	if token == DEFAULT_TOKEN_FILE_NAME:
+		pass
+	elif threadID == DEFAULT_THREAD_ID_FILE_NAME:
+		pass
+	elif not token or not threadID:
+		pass
+	else:
+		valid = True
+	return valid
 
 def getKey(keyOrPath):
 	key = ""
